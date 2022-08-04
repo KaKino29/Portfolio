@@ -1,18 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import Carousel from "react-material-ui-carousel";
-import { style } from "@mui/system";
 
 const Wrapper = styled.div`
-  margin: 59px;
-  height: 75vh;
+  margin: 20vh;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: bisque;
 `;
 
-const Loading = styled.div``;
+// const Loading = styled.div``;
 
 const Row = styled.div`
   display: flex;
@@ -22,7 +21,7 @@ const Row = styled.div`
 
 const CarouselSlider = styled(Carousel)`
   width: 900px;
-  height: 70vh;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;

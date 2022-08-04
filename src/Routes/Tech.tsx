@@ -3,9 +3,8 @@ import React from "react";
 import Carousel from "react-material-ui-carousel";
 
 const Wrapper = styled.div`
-  margin: 79px;
-
-  height: 75vh;
+  margin: 20vh;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,7 +18,7 @@ const Row = styled.div`
 
 const CarouselSlider = styled(Carousel)`
   width: 900px;
-  height: 80vh;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,7 +28,7 @@ const CarouselSlider = styled(Carousel)`
 
 const Box = styled.div`
   width: 500px;
-  height: 500px;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import styled from "styled-components";
 import { Link, useMatch } from "react-router-dom";
 import React from "react";
+import { DarkMode, LightMode } from "@mui/icons-material";
 
 const Nav = styled(motion.nav)`
   display: grid;
@@ -34,7 +35,7 @@ const Item = styled(motion.li)`
 
 const Logo = styled.div``;
 
-const Github = styled.div`
+const ToggleMode = styled.div`
   display: flex;
   justify-content: end;
 `;
@@ -95,11 +96,10 @@ function Header() {
             )}
           </Items>
         </Col>
-        <Github>
-          <a href="https://github.com/KaKino29" target="_blank">
-            Github Link (New tab)
-          </a>
-        </Github>
+        <ToggleMode>
+          <LightMode />
+          <DarkMode />
+        </ToggleMode>
       </AnimatePresence>
     </Nav>
   );
