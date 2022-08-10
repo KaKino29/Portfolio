@@ -55,7 +55,7 @@ function Tech() {
       <Row>
         <CarouselSlider
           fullHeightHover={true}
-          indicators={true}
+          indicators={false}
           autoPlay={false}
           navButtonsAlwaysVisible={true}
           animation="slide"

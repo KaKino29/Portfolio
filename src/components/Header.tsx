@@ -3,10 +3,12 @@ import styled from "styled-components";
 import { Link, useMatch } from "react-router-dom";
 import React from "react";
 import { DarkMode, LightMode } from "@mui/icons-material";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atom";
 
 const Nav = styled(motion.nav)`
   display: grid;
-  grid-template-columns: 15% 70% 15%;
+  grid-template-columns: 10% 80% 10%;
   justify-content: space-between;
   align-items: center;
   position: fixed;
@@ -21,9 +23,9 @@ const Nav = styled(motion.nav)`
 const Col = styled.div``;
 
 const Items = styled.ul`
-  width: 60%;
+  width: 80%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   margin: 0 auto;
 `;
 
@@ -35,9 +37,11 @@ const Item = styled(motion.li)`
 
 const Logo = styled.div``;
 
-const ToggleMode = styled.div`
+const ToggleMode = styled.button`
   display: flex;
-  justify-content: end;
+  justify-content: center;
+  justify-self: end;
+  width: 25px;
 `;
 
 const hoverVar = {
@@ -50,6 +54,11 @@ function Header() {
   const introMatch = useMatch("intro");
   const techMatch = useMatch("tech");
   const wlMatch = useMatch("WishList");
+  const tdMatch = useMatch("ToDoList");
+  const jsMatch = useMatch("JobScraper");
+  const themeMode = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleThemeMode = () => setDarkAtom((prev) => !prev);
   return (
     <Nav>
       <AnimatePresence>
@@ -94,11 +103,28 @@ function Header() {
                 <Link to="/WishList">Wish List</Link>
               </Item>
             )}
+            {(tdMatch && (
+              <Item style={{ scale: "1.2" }}>
+                <Link to="/ToDoList">To Do List</Link>
+              </Item>
+            )) || (
+              <Item variants={hoverVar} whileHover="hover" whileTap="clicked">
+                <Link to="/ToDoList">To Do List</Link>
+              </Item>
+            )}
+            {(jsMatch && (
+              <Item style={{ scale: "1.2" }}>
+                <Link to="/JobScraper">Job Scraper</Link>
+              </Item>
+            )) || (
+              <Item variants={hoverVar} whileHover="hover" whileTap="clicked">
+                <Link to="/JobScraper">Job Scraper</Link>
+              </Item>
+            )}
           </Items>
         </Col>
-        <ToggleMode>
-          <LightMode />
-          <DarkMode />
+        <ToggleMode onClick={toggleThemeMode}>
+          {themeMode ? <DarkMode /> : <LightMode />}
         </ToggleMode>
       </AnimatePresence>
     </Nav>

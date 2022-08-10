@@ -7,7 +7,9 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Home from "./Routes/Home";
 import Intro from "./Routes/Intro";
+import JobScraper from "./Routes/JobScraper";
 import Tech from "./Routes/Tech";
+import ToDoList from "./Routes/ToDoList";
 import WishList from "./Routes/WishList";
 import { DarkTheme, LightTheme } from "./theme";
 
@@ -66,7 +68,6 @@ table {
 body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
-  background: ${(props) => props.theme.textColor};
   color: #202020;
   line-height: 1.2;
   background-color: ${(props) => props.theme.bgColor};
@@ -94,6 +95,8 @@ function App() {
           <Route path="/Tech" element={<Tech />} />
           <Route path="/Intro" element={<Intro />} />
           <Route path="/WishList" element={<WishList />} />
+          <Route path="/JobScraper" element={<JobScraper />} />
+          <Route path="/ToDoList" element={<ToDoList />} />
         </Routes>
         <Footer />
       </ThemeProvider>
