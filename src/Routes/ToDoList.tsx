@@ -1,41 +1,82 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { categories, categoryState, toDoSelector } from "../atom";
+import { DragDropContext, DropResult } from "@hello-pangea/dnd";
+import styled from "styled-components";
+import { SetterOrUpdater, useRecoilState, useSetRecoilState } from "recoil";
+import { categoryState, deleteState, IToDoState, toDoState } from "../atom";
+import Board from "../components/Board";
+import CreateCategory from "../components/CreateCategory";
 
-interface IForm {
-  toCategory: string;
-  id: number;
-}
+const Wrapper = styled.div`
+  display: flex;
+  width: 100vw;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+const Boards = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  gap: 10px;
+`;
 
 function ToDoList() {
-  const categoryList = useRecoilValue(categories);
-  const toDos = useRecoilValue(toDoSelector);
-  const [category, setCategory] = useRecoilState(categoryState);
-  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
-    setCategory(event.currentTarget.value as any);
+  const [toDos, setToDos] = useRecoilState(toDoState);
+  const [categories, setCategories] = useRecoilState(categoryState);
+  const setDelete = useSetRecoilState(deleteState);
+  const onDragEnd = (
+    info: DropResult,
+    setCategories: SetterOrUpdater<string[]>,
+    setToDos: SetterOrUpdater<IToDoState>,
+    setDelete: SetterOrUpdater<boolean>
+  ) => {
+    console.log(info);
+    const { destination, source } = info;
+    if (!destination) return;
+    setDelete(false);
+    if (destination?.droppableId === source.droppableId) {
+      // same board movement.
+      setToDos((allBoards) => {
+        const boardCopy = [...allBoards[source.droppableId]];
+        const taskObj = boardCopy[source.index];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination?.index, 0, taskObj);
+        return {
+          ...allBoards,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    }
+    if (destination.droppableId !== source.droppableId) {
+      // cross board movement
+      setToDos((allBoards) => {
+        const sourceBoard = [...allBoards[source.droppableId]];
+        const taskObj = sourceBoard[source.index];
+        const destinationBoard = [...allBoards[destination.droppableId]];
+        sourceBoard.splice(source.index, 1);
+        destinationBoard.splice(destination?.index, 0, taskObj);
+        return {
+          ...allBoards,
+          [source.droppableId]: sourceBoard,
+          [destination.droppableId]: destinationBoard,
+        };
+      });
+    }
   };
-  const setCategories = useSetRecoilState(categories);
-  const { setValue } = useForm<IForm>();
-  const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setCategories((oldCategories) => {
-      const {
-        currentTarget: { name },
-      } = event;
-      const newCategory = oldCategories?.filter(
-        (category) => category.name === name
-      );
-      return newCategory;
-    });
-    setCategories((oldCategories) => [
-      { name: "TO DO", id: 0 },
-      { name: "DOING", id: 1 },
-      { name: "DONE", id: 2 },
-      ...oldCategories,
-    ]);
-    setValue("toCategory", "");
-  };
-  return null;
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Wrapper>
+        <Boards>
+          {Object.keys(toDos).map((boardId) => (
+            <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
+          ))}
+        </Boards>
+      </Wrapper>
+    </DragDropContext>
+  );
 }
 
 export default ToDoList;
